@@ -21,14 +21,17 @@ def normalize_index(index, bound):
 class Surface:
     def __init__(self, width=20, height=20):
         self.min_size = 3
-        self.max_size = 1000
-        self.width = 3
-        self.height = 3
+        self.max_size = 10000
 
-        if self.min_size < width < self.max_size:
+        if self.min_size <= width <= self.max_size:
             self.width = width
-        if self.min_size < height < self.max_size:
+        else:
+            raise SurfaceSizeException
+
+        if self.min_size <= height <= self.max_size:
             self.height = height
+        else:
+            raise SurfaceSizeException
 
         self.cells = fill(self.width, self.height)
 
@@ -47,3 +50,7 @@ class Surface:
                 if self.get(i, j).is_alive:
                     alive = alive + 1
         return alive
+
+
+class SurfaceSizeException(Exception):
+    pass

@@ -1,4 +1,5 @@
 from .Surface import Surface
+from .Surface import SurfaceSizeException
 from view import VisualView
 import time
 
@@ -7,12 +8,24 @@ class Game:
 
     def __init__(self, width=20, height=20, tick_time=0.1, game_time_bound=1000,
                  alone_size=2, over_size=3, birth_size=3):
-        self.surface = Surface(width, height)
+        try:
+            self.surface = Surface(width, height)
+        except SurfaceSizeException:
+            raise GameException
+
         self.tick_time = tick_time
         self.game_time_bound = game_time_bound
         self.change_log = []
         self.is_end = False
         self.is_pause = True
+
+        if not alone_size <= over_size:
+            raise GameException
+
+        for x in [alone_size, over_size, birth_size]:
+            if not 0 <= x <= 8:
+                raise GameException
+
         self.alone_size = alone_size
         self.over_size = over_size
         self.birth_size = birth_size
@@ -74,3 +87,7 @@ class Game:
                     break
         if all_dead:
             self.stop("All cells are dead")
+
+
+class GameException(Exception):
+    pass
