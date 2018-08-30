@@ -1,30 +1,19 @@
 from tkinter import *
+from .ButtonsPanel import ButtonsPanel
+from .GameScreenPanel import GameScreenPanel
+
+master = Tk()
 
 
 class VisualView:
-    def __init__(self, game, dead_cell_color="black", alive_cell_color="red"):
 
+    def __init__(self, game):
+        self.master = master
         self.game = game
-        self.master = Tk()
-
-
-        self.start_button = Button(self.master)
-
-
-
-    def update_view(self):
-        self.show_surface()
+        self.buttons_panel = ButtonsPanel(game=game, master=self.master)
+        self.game_screen_panel = GameScreenPanel(game=game, master=self.master)
         self.master.update()
 
-    def show_info(self):
-        print("Life Game %ix%i" % (self.game.surface.width, self.game.surface.height))
-        print("Counter %i / %i" % (self.game.count, self.game.game_time_bound))
-
-
-
-
-
-
-
-    def print_end_msg(self, msg):
-        print(msg)
+    def update_view(self):
+        self.game_screen_panel.update_surface()
+        self.master.update()

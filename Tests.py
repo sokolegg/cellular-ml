@@ -4,6 +4,8 @@ from models import GameException
 from models import Game
 
 
+
+
 class Tests(unittest.TestCase):
 
     def setUp(self):
@@ -42,9 +44,10 @@ class Tests(unittest.TestCase):
         self.assertTrue(without_good)
 
 
+
+
 def run_test(unittest_class):
     suite = unittest.TestLoader().loadTestsFromTestCase(unittest_class)
     unittest.TextTestRunner(verbosity=2).run(suite)
 
 
-run_test(Tests)

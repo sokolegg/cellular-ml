@@ -1,4 +1,5 @@
 from tkinter import *
+from controllers import CellButtons
 
 
 class GameScreenPanel:
@@ -6,7 +7,7 @@ class GameScreenPanel:
     def __init__(self, game, master):
 
         self.game = game
-
+        self.master = master
         self.canvas_size = 1000
         self.canvas = Canvas(master, width=self.canvas_size, height=self.canvas_size)
         self.canvas.pack()
@@ -17,6 +18,8 @@ class GameScreenPanel:
         self.cell_border = 1
 
         self.cells = self.init_cells(game.surface.width, game.surface.height)
+        self.cell_buttons_controller = CellButtons(game, self.cell_size)
+        self.canvas.bind("<Button-1>", self.cell_buttons_controller.click)
 
     def init_cells(self, width, height):
         cells = {}
@@ -35,8 +38,14 @@ class GameScreenPanel:
                                           right - border, bottom - border, fill=color, tag='cell')
         return sq
 
+    def rebuild_canvas(self):
+        self.canvas.delete("all")
+        self.cells = self.init_cells(self.game.surface.width, self.game.surface.height)
+        self.canvas.bind("<Button-1>", self.cell_buttons_controller.click)
+
     def update_surface(self):
         surface = self.game.surface
+        print(self.cells)
         for y in range(0, surface.height):
             for x in range(0, surface.height):
                 cell_id = self.cells[(x, y)]
